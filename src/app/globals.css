@@ -1,0 +1,105 @@
+/* 1. ดึง Noto Sans Thai มาเป็นฟอนต์หลัก (แก้ปัญหา Android ฟอนต์ดื้อ) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* 2. บังคับยัดฟอนต์ใส่ทุกอย่างแบบไม่สนลูกใคร */
+  font-family: 'Noto Sans Thai', sans-serif !important;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Dark Mode (Default) */
+:root {
+  --bg: #050508; 
+  --bg-card: #0f0f18;
+  --bg-hover: #161625;
+  --border: #1e1e2e;
+  --border-hover: #31314d;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --accent-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+  --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --sidebar-bg: #08080d;
+  --sidebar-border: #1a1a2a;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  /* ตัวแปรฟอนต์เผื่อจุดที่อยากใช้ Monospace เช่น ตัวเลขราคา */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Light Mode */
+.light, [data-theme="light"] {
+  --bg: #f1f5f9; 
+  --bg-card: #ffffff; 
+  --bg-hover: #f8fafc;
+  --border: rgba(15, 23, 42, 0.08); 
+  --border-hover: rgba(15, 23, 42, 0.15);
+  --text-primary: #020617; 
+  --text-secondary: #334155; 
+  --text-muted: #64748b;
+  --accent: #4338ca; 
+  --accent-hover: #3730a3;
+  --accent-glow: 0 10px 15px -3px rgba(67, 56, 202, 0.2);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --sidebar-bg: #ffffff;
+  --sidebar-border: rgba(15, 23, 42, 0.08);
+  --success: #15803d; 
+  --warning: #b45309;
+  --danger: #b91c1c;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* 3. ล็อกฟอนต์ตัวเลขให้เป็น Monospace ในจุดที่เราต้องการความเป๊ะ (เช่น ราคา) */
+.font-mono, 
+[style*="DM Mono"], 
+[style*="var(--font-mono)"] {
+  font-family: var(--font-mono) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* --- Utility Classes (ใช้แก้ปัญหา Layout) --- */
+
+/* 1. แก้ข้อความทับกัน: บังคับตัดข้อความยาวๆ เป็น ... */
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* 2. Hover Effect */
+.hover-card {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-card:hover {
+  background-color: var(--bg-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}

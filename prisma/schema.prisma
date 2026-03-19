@@ -1,0 +1,142 @@
+// Generator Configuration
+generator client {
+  provider = "prisma-client-js"
+}
+
+//Datasource Configuration
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+
+// Model Definition
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
+  notifications NotificationLog[]
+
+  @@map("users")
+}
+
+
+// Core Entity
+model Subscription {
+  id          String             @id @default(uuid())
+  userId      String
+  name        String                          // "Netflix"
+  logoUrl     String?                         // URL หรือ emoji
+  category    SubscriptionCategory            // ENTERTAINMENT, PRODUCTIVITY, etc.
+  amount      Float                           // 549.00
+  currency    String             @default("THB")
+  billingDay  Int                             // 1-31 (วันที่ตัดรอบ)
+  billingCycle BillingCycle      @default(MONTHLY)
+  status      SubscriptionStatus @default(ACTIVE)
+  startDate   DateTime?
+  notes       String?
+  website     String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bills Bill[]
+
+  @@map("subscriptions")
+}
+
+
+// BILL (ประวัติการจ่ายเงิน) Transaction Entity
+model Bill {
+  id             String     @id @default(uuid())
+  subscriptionId String
+  amount         Float
+  currency       String     @default("THB")
+  billingDate    DateTime                    // วันที่ตัดรอบจริง
+  status         BillStatus @default(PENDING)
+  rawEmailId     String?                     // link กลับไปยัง email ต้นทาง
+  createdAt      DateTime   @default(now())
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  rawEmail     RawEmail?    @relation(fields: [rawEmailId], references: [id])
+
+  @@map("bills")
+}
+
+//Staging Area
+model RawEmail {
+  id             String           @id @default(uuid())
+  userId         String
+  fromEmail      String
+  subject        String
+  bodyText       String?          @db.Text
+  bodyHtml       String?          @db.Text
+  imageUrl       String?         
+  aiRawResponse  String?          @db.Text  
+  receivedAt     DateTime         @default(now())
+  parseStatus    EmailParseStatus @default(PENDING)
+  parseError     String?
+
+  bills Bill[]
+
+  @@map("raw_emails")
+}
+
+//Activity Log
+model NotificationLog {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String                           // "REMINDER", "PARSED", "WEEKLY_SUMMARY"
+  subject   String
+  sentAt    DateTime @default(now())
+  status    String   @default("SENT")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_logs")
+}
+
+
+// ENUMS Type Constraints
+enum SubscriptionCategory {
+  ENTERTAINMENT
+  PRODUCTIVITY
+  DEVELOPER
+  DESIGN
+  MUSIC
+  GAMING
+  CLOUD
+  FINANCE
+  HEALTH
+  OTHER
+}
+
+enum BillingCycle {
+  MONTHLY
+  YEARLY
+  WEEKLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+enum BillStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum EmailParseStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
