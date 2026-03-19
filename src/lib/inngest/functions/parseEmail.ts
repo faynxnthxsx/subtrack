@@ -1,5 +1,4 @@
 import { inngest } from "@/lib/inngest/client";
-import { extractEmailData } from "@/lib/gemini";
 import { prisma } from "@/lib/prisma";
 
 export const parseEmailFunction = inngest.createFunction(
@@ -13,7 +12,7 @@ export const parseEmailFunction = inngest.createFunction(
     const { rawEmailId, subject, body } = event.data;
 
     const extracted = await step.run("extract-with-gemini", async () => {
-      return await extractEmailData(subject, body);
+   //   return await extractEmailData(subject, body);
     });
 
     if (!extracted) {
