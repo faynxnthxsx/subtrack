@@ -19,35 +19,47 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  async function handleRegister(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  // เปลี่ยนเฉพาะส่วน handleRegister
+async function handleRegister(e: React.FormEvent) {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    if (password.length < 8) {
-      setError("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
-      setLoading(false);
-      return;
-    }
+  const cleanName = name.trim();
+  const cleanEmail = email.trim().toLowerCase();
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name },                          // เก็บชื่อใน user metadata
-        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-      return;
-    }
-
-    setSuccess(true);
+  if (password.length < 8) {
+    setError("รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
     setLoading(false);
+    return;
   }
+
+  const { error } = await supabase.auth.signUp({
+    email: cleanEmail,
+    password,
+    options: {
+      data: { 
+        name: cleanName,
+        full_name: cleanName, // ใส่เผื่อไว้ทั้งสองแบบให้ตรงกับ API route.ts
+      },
+      emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+    },
+  });
+
+  if (error) {
+    // แปลข้อความ Error พื้นฐานให้ User เข้าใจง่ายขึ้น
+    if (error.message.includes("User already registered")) {
+        setError("อีเมลนี้ถูกใช้งานไปแล้ว");
+    } else {
+        setError(error.message);
+    }
+    setLoading(false);
+    return;
+  }
+
+  setSuccess(true);
+  setLoading(false);
+}
 
   if (success) {
     return (

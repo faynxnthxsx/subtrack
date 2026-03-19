@@ -43,15 +43,23 @@ export default function LoginPage() {
   // ===========================
   // Login ด้วย Google
   // ===========================
+  // ===========================
+  // Login ด้วย Google
+  // ===========================
   async function handleGoogleLogin() {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,
+  await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      queryParams: {
+        prompt: 'select_account', // บังคับให้เลือกเมลใหม่
+        access_type: 'offline',
       },
-    });
-  }
-
+      // สำคัญมาก: ต้องใส่ scope เพื่อขอชื่อและเมล
+      scopes: 'email profile', 
+      redirectTo: `${window.location.origin}/api/auth/callback`,
+    },
+  });
+}
   return (
     <div style={{
       minHeight: "100vh",
