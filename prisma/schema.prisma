@@ -1,15 +1,15 @@
 // Generator Configuration
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
-//Datasource Configuration
+// Datasource Configuration
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
-
 
 // Model Definition
 model User {
