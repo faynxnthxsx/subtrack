@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-// ดึง Noto_Sans_Thai มาแทน Geist สำหรับตัวหนังสือทั่วไป
 import { Noto_Sans_Thai, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-// คอนฟิกฟอนต์ไทย บังคับโหลด Subset ภาษาไทย
 const notoSansThai = Noto_Sans_Thai({
   subsets: ["thai", "latin"],
   weight: ["300", "400", "500", "600", "700"],
-  display: "swap", // ป้องกัน FOIT (กระพริบหน้าขาว)
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -27,16 +25,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // เปลี่ยน lang เป็น th ให้ Browser รู้จักและ Render ฟอนต์ได้เนียนขึ้น
     <html lang="th" suppressHydrationWarning>
       <body
-        // ยัด notoSansThai.className เข้าไปตรงๆ เพื่อบังคับใช้ฟอนต์นี้เป็น Global
         className={`${notoSansThai.className} ${geistMono.variable} antialiased`}
         style={{ 
           background: "var(--bg)", 
           color: "var(--text-primary)",
-          minHeight: "100vh",
-          overflowX: "hidden" // 🚀 Kill Switch: สั่งปิดการเลื่อนซ้ายขวาทั้งโปรเจกต์ 100%
+          // [FIX]: เปลี่ยนจาก minHeight เป็นการคุม overflow ให้เหมาะสม
+          minHeight: "100dvh", // ใช้ dvh เพื่อให้แม่นยำบนมือถือ
+          margin: 0,
+          padding: 0,
+          overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column"
         }}
       >
         <ThemeProvider
@@ -44,7 +45,14 @@ export default function RootLayout({
           defaultTheme="dark"
           enableSystem={false}
         >
-          {children}
+          {/* 🚀 Dev Note: 
+             ถ้าคุณมี Sidebar หรือ Bottom Nav ที่ใช้ร่วมกันทุกหน้า 
+             ควรเอามาวางครอบ {children} ตรงนี้ 
+             แต่ถ้าคุณเรียกใช้ข้างใน Page... children จะรับกรรมไปเต็มๆ
+          */}
+          <main style={{ flex: 1, width: "100%", position: "relative" }}>
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

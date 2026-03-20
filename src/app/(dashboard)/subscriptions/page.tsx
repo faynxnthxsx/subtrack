@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SubscriptionList from "@/components/dashboard/SubscriptionList";
 import AddSubscriptionModal from "@/components/dashboard/AddSubscriptionModal";
 import { formatCurrency } from "@/lib/utils";
@@ -21,37 +21,106 @@ export default function SubscriptionsPage() {
 
   useEffect(() => { fetchSubscriptions(); }, [fetchSubscriptions]);
 
-  // ป้องกันยอดเป็น 0
-  const totalMonthly = useMemo(() => {
-    return subscriptions.reduce((acc, sub) => acc + (Number(sub.amount) || 0), 0);
-  }, [subscriptions]);
+  const totalMonthly = subscriptions.reduce((s, i) => s + i.amount, 0);
 
   return (
-    <div style={{ padding: "28px 32px", minHeight: "100vh", background: "var(--bg)", maxWidth: "1200px", margin: "0 auto", width: "100%" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Subscriptions</h1>
-        <button onClick={() => setShowModal(true)} style={{ padding: "10px 18px", background: "var(--accent)", borderRadius: 10, color: "white", fontSize: 14, fontWeight: 600, border: "none", cursor: "pointer", boxShadow: "var(--accent-glow)" }}>+ เพิ่มบริการ</button>
-      </div>
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        .subs-container {
+          padding: 28px 32px;
+          min-height: 100vh;
+          background: var(--bg);
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
+        }
+        .summary-bar {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 24px;
+          padding: 20px;
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          box-shadow: var(--card-shadow);
+        }
+        .summary-item { }
+        .summary-label {
+          font-size: 11px;
+          font-weight: 600;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 6px;
+        }
+        .summary-value {
+          font-size: 22px;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+        @media (max-width: 768px) {
+          .subs-container {
+            padding: 20px 16px 100px;
+          }
+          .summary-bar {
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 16px;
+          }
+          .summary-value { font-size: 18px; }
+        }
+      `}} />
 
-      <div style={{ display: "flex", gap: 24, marginBottom: 24, padding: "20px 24px", background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16, boxShadow: "var(--card-shadow)" }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 6 }}>ทั้งหมด</div>
-          <div style={{ fontSize: 24, fontWeight: 700 }}>{subscriptions.length} <span style={{ fontSize: 14, fontWeight: 500 }}>บริการ</span></div>
+      <div className="subs-container">
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary)" }}>
+            Subscriptions
+          </h1>
+          <button
+            onClick={() => setShowModal(true)}
+            style={{
+              padding: "10px 18px", background: "var(--accent)",
+              borderRadius: 10, color: "white", fontSize: 14, fontWeight: 600,
+              border: "none", cursor: "pointer", boxShadow: "var(--accent-glow)",
+            }}
+          >
+            + เพิ่มบริการ
+          </button>
         </div>
-        <div style={{ width: 1, background: "var(--border)" }} />
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 6 }}>รายจ่าย/เดือน</div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: "var(--accent)" }}>{formatCurrency(totalMonthly)}</div>
-        </div>
-        <div style={{ width: 1, background: "var(--border)" }} />
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 6 }}>รายจ่าย/ปี</div>
-          <div style={{ fontSize: 24, fontWeight: 700 }}>{formatCurrency(totalMonthly * 12)}</div>
-        </div>
-      </div>
 
-      {loading ? <div style={{ textAlign: "center", padding: "40px 0" }}>กำลังโหลด...</div> : <SubscriptionList subscriptions={subscriptions} onRefresh={fetchSubscriptions} />}
-      {showModal && <AddSubscriptionModal onClose={() => setShowModal(false)} onSuccess={fetchSubscriptions} />}
-    </div>
+        {/* Summary Bar */}
+        <div className="summary-bar">
+          <div className="summary-item">
+            <div className="summary-label">ทั้งหมด</div>
+            <div className="summary-value">{subscriptions.length} <span style={{ fontSize: 13, color: "var(--text-muted)" }}>บริการ</span></div>
+          </div>
+          <div className="summary-item">
+            <div className="summary-label">รายจ่าย/เดือน</div>
+            <div className="summary-value" style={{ color: "var(--accent)" }}>{formatCurrency(totalMonthly)}</div>
+          </div>
+          <div className="summary-item">
+            <div className="summary-label">รายจ่าย/ปี</div>
+            <div className="summary-value">{formatCurrency(totalMonthly * 12)}</div>
+          </div>
+        </div>
+
+        {/* List */}
+        {loading ? (
+          <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "40px 0" }}>กำลังโหลด...</div>
+        ) : (
+          <SubscriptionList subscriptions={subscriptions} onRefresh={fetchSubscriptions} />
+        )}
+
+        {/* Modal */}
+        {showModal && (
+          <AddSubscriptionModal
+            onClose={() => setShowModal(false)}
+            onSuccess={fetchSubscriptions}
+          />
+        )}
+      </div>
+    </>
   );
 }
