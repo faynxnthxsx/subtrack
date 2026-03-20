@@ -78,7 +78,7 @@ async function handleRegister(e: React.FormEvent) {
             ตรวจสอบอีเมลของคุณ
           </h2>
           <p style={{ color: "#475569", fontSize: 14, lineHeight: 1.6 }}>
-            เราส่ง confirmation link ไปที่ <strong style={{ color: "#818cf8" }}>{email}</strong> แล้ว
+            เราส่ง confirmation ไปที่ <strong style={{ color: "#818cf8" }}>{email}</strong>
             กดลิงก์ในอีเมลเพื่อเริ่มใช้งาน
           </p>
         </div>
@@ -109,7 +109,6 @@ async function handleRegister(e: React.FormEvent) {
           <h1 style={{ color: "#f1f5f9", fontSize: 22, fontWeight: 700, marginBottom: 6 }}>
             สมัครสมาชิก
           </h1>
-          <p style={{ color: "#475569", fontSize: 14 }}>ฟรี ไม่มีค่าใช้จ่าย</p>
         </div>
 
         <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: 16 }}>

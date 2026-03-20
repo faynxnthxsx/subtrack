@@ -90,11 +90,8 @@ export default function LoginPage() {
           }}>
             <span style={{ color: "white", fontSize: 20 }}>⚡</span>
           </div>
-          <h1 style={{ color: "#f1f5f9", fontSize: 22, fontWeight: 700, marginBottom: 6 }}>
-            เข้าสู่ระบบ
-          </h1>
           <p style={{ color: "#475569", fontSize: 14 }}>
-            จัดการ Subscription ทั้งหมดในที่เดียว
+            ระบบจัดการรายจ่าย
           </p>
         </div>
 
