@@ -60,7 +60,7 @@ export default function UploadPage() {
     if (res.ok) {
       router.push("/subscriptions");
     } else {
-      setError("บันทึกไม่สำเร็จ เซิร์ฟเวอร์ขัดข้อง");
+      setError("บันทึกไม่สำเร็จ");
     }
   }
 

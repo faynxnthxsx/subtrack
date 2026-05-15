@@ -1,6 +1,5 @@
-// src/app/api/webhooks/cloudmailin/route.ts
-// รับ webhook จาก Cloudmailin เมื่อมี email เข้ามา
-// แล้ว trigger Inngest function ให้ AI ประมวลผล
+// รับ webhook จาก Cloudmailin เมื่อ email เข้ามา
+// แล้ว trigger Inngest function ให้ AI ประมวลผลเเบบไม่ต้องรอ
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -8,12 +7,12 @@ import { inngest } from "@/lib/inngest/client";
 
 export async function POST(request: Request) {
   try {
-    // ===========================
-    // 1. ตรวจสอบ Basic Auth
-    // ===========================
+    //  ตรวจสอบ Basic Auth
     const authHeader = request.headers.get("authorization");
     if (authHeader) {
+      //Encoding format รูปเเบบการเข้ารหัส
       const base64 = authHeader.replace("Basic ", "");
+      //Binary format พื้นที่เก็บข้อมูลชั่วคราว
       const decoded = Buffer.from(base64, "base64").toString();
       const [username, password] = decoded.split(":");
 
@@ -24,10 +23,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
     }
-
-    // ===========================
-    // 2. Parse email payload จาก Cloudmailin
-    // ===========================
+    // Parse email payload จาก Cloudmailin
+  
     const body = await request.json();
 
     const fromEmail = body.envelope?.from ?? body.headers?.from ?? "";
@@ -35,12 +32,6 @@ export async function POST(request: Request) {
     const bodyText = body.plain ?? "";
     const bodyHtml = body.html ?? "";
     const toEmail = body.envelope?.to ?? "";
-
-    // ===========================
-    // 3. หา userId จาก inbound email address
-    // ชื่อ format: parse+{userId}@cloudmailin.net
-    // ===========================
-    // สำหรับตอนนี้ใช้วิธีง่ายๆ คือ
     // หา user จาก email ที่ส่งมา (fromEmail)
     const user = await prisma.user.findUnique({
       where: { email: fromEmail },
@@ -51,10 +42,7 @@ export async function POST(request: Request) {
       console.log(`Unknown sender: ${fromEmail}`);
       return NextResponse.json({ message: "ok" }, { status: 200 });
     }
-
-    // ===========================
     // 4. บันทึก raw email ลง DB
-    // ===========================
     const rawEmail = await prisma.rawEmail.create({
       data: {
         userId: user.id,
@@ -65,10 +53,7 @@ export async function POST(request: Request) {
         parseStatus: "PENDING",
       },
     });
-
-    // ===========================
     // 5. Trigger Inngest function
-    // ===========================
     await inngest.send({
       name: "email/received",
       data: {

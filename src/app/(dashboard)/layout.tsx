@@ -11,12 +11,12 @@ export default function DashboardLayout({
     <div className="layout-wrapper">
       <Sidebar />
       
-      {/* 🚀 ใช้ className ล้วนๆ ห้ามมี style={{}} ใน main เด็ดขาด */}
+      {/* 🚀 กำหนดเื้อหาหลัก ไม่ให้ทัยเเถบซ้าย */}
       <main className="main-content">
         {children}
       </main>
 
-      {/* ฝัง CSS ควบคุมขอบจอให้อยู่หมัด */}
+      {/* ฝัง CSS สด ใช้ท่าพิเศษ ให้เเสดงผลทันที */}
       <style dangerouslySetInnerHTML={{__html: `
         .layout-wrapper {
           background: var(--bg);

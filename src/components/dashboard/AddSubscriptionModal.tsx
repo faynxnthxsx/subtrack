@@ -1,6 +1,5 @@
+//Directive
 "use client";
-
-// src/components/dashboard/AddSubscriptionModal.tsx
 
 import { useState } from "react";
 
@@ -13,7 +12,7 @@ type Props = {
   onClose: () => void;
   onSuccess: () => void;
 };
-
+//usestate from user กรอกข้อมูลเเละมี default 
 export default function AddSubscriptionModal({ onClose, onSuccess }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,10 +26,11 @@ export default function AddSubscriptionModal({ onClose, onSuccess }: Props) {
     notes: "",
   });
 
+  //React event type
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
-
+//ป้องกัน รีเฟรช
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);

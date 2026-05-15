@@ -25,6 +25,7 @@ async function handleRegister(e: React.FormEvent) {
   setLoading(true);
   setError("");
 
+  //Sanitization-Normalization
   const cleanName = name.trim();
   const cleanEmail = email.trim().toLowerCase();
 

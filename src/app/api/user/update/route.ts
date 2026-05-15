@@ -16,7 +16,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "ชื่อไม่ถูกต้อง" }, { status: 400 });
     }
 
-    // อัปเดตพร้อมกันทั้ง 2 ที่เลย
+    // อัปเดตพร้อมกันไม่ต้องสร้าง Static Method
     await Promise.all([
       supabase.auth.updateUser({
         data: { name: name.trim(), full_name: name.trim() },

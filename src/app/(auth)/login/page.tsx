@@ -17,9 +17,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ===========================
-  // Login ด้วย Email/Password
-  // ===========================
+
+  // Login ด้วย Email/Password * Event Handler ย่อ *
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -40,12 +39,7 @@ export default function LoginPage() {
     router.refresh();
   }
 
-  // ===========================
   // Login ด้วย Google
-  // ===========================
-  // ===========================
-  // Login ด้วย Google
-  // ===========================
   async function handleGoogleLogin() {
   await supabase.auth.signInWithOAuth({
     provider: "google",

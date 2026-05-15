@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const [pageLoading, setPageLoading] = useState(true);
   const [user, setUser] = useState({ name: "", email: "" });
 
-  // ดึงข้อมูล user จริงจาก Supabase
+  // ดึงข้อมูล user จริงจาก Supabase Nested Destructuring
   useEffect(() => {
     async function loadUser() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
@@ -19,12 +19,13 @@ export default function ProfilePage() {
         router.push("/login");
         return;
       }
+      //State Setter
       setUser({
         name: authUser.user_metadata?.name ?? authUser.user_metadata?.full_name ?? authUser.email?.split("@")[0] ?? "User",
         email: authUser.email ?? "",
       });
       setPageLoading(false);
-    }
+    } 
     loadUser();
   }, []);
 

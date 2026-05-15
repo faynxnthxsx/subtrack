@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Thai, Geist_Mono } from "next/font/google";
+import { Noto_Sans_Thai, Geist_Mono } from "next/font/google"; //ฟ้อนกว่างเเละเท่ากันขนาด
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 

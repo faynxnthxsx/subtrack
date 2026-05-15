@@ -11,6 +11,8 @@ export default function DashboardPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
 
+
+  //Identity Stability Dependency Array
   const fetchSubscriptions = useCallback(async () => {
     try {
       setLoading(true);
@@ -28,7 +30,7 @@ export default function DashboardPage() {
     fetchSubscriptions();
   }, [fetchSubscriptions]);
 
-  // แก้ Logic คำนวณเงินให้ชัวร์
+  // Accumulator
   const totalMonthly = useMemo(() => {
     return subscriptions.reduce((acc, item) => acc + (Number(item.amount) || 0), 0);
   }, [subscriptions]);

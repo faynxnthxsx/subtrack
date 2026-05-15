@@ -14,8 +14,8 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data?.user) {
-      // ✅ [ADD] ท่าไม้ตาย: บังคับสร้าง User ใน Neon ทันทีที่ Google ยืนยันสำเร็จ
-      // เพื่อป้องกันหน้า Dashboard หา User ไม่เจอในครั้งแรก
+     
+      // อัปเดต เเละเเทรกบันทึกข้อมูลแบบอเนกประสงค์
       await prisma.user.upsert({
         where: { id: data.user.id },
         update: {

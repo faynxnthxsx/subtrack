@@ -5,6 +5,7 @@ import { updateSubscriptionSchema } from "@/lib/validations";
 
 export async function PATCH(
   request: Request,
+  /* params มันเป็น Promise ของ Object ที่มี id เป็น string */
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -16,7 +17,7 @@ export async function PATCH(
 
     const body = await request.json();
     
-    // 🔥 บังคับ Parse ข้อมูลก่อนเข้า Zod/Prisma กันพัง
+    // 🔥 บังคับ Parse ข้อมูลกันพัง
     const payload = {
       ...body,
       amount: parseFloat(body.amount),

@@ -41,6 +41,7 @@ export async function POST(request: Request) {
     await ensureUser(user);
 
     const body = await request.json();
+    /*ตรวจสอบข้อมูล body ด้วย schem*/
     const validated = createSubscriptionSchema.parse(body);
 
     const subscription = await prisma.subscription.create({
