@@ -12,7 +12,7 @@ import type {
 // Prisma types
 export type { Subscription, Bill, User };
 
-//  Type Extension Merge
+//  Type Extension Merge  Custom type
 export type SubscriptionWithBills = Subscription & {
   bills: Bill[];
 };
@@ -29,7 +29,7 @@ export type DashboardStats = {
 
 export type UpcomingBill = {
   subscriptionId: string;
-  name: string;
+  name: string;          
   amount: number;
   currency: string;
   daysLeft: number;

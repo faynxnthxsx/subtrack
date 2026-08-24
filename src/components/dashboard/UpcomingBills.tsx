@@ -13,7 +13,7 @@ export default function UpcomingBills({ subscriptions }: Props) {
   const upcoming = subscriptions
     .map((s) => ({ ...s, daysLeft: getDaysUntilBilling(s.billingDay) }))
     .filter((s) => s.daysLeft <= 10)
-    .sort((a, b) => a.daysLeft - b.daysLeft)
+    .sort((a, b) => a.daysLeft - b.daysLeft) //เรียงลำดับ
     .slice(0, 4);
 
   return (
@@ -42,6 +42,7 @@ export default function UpcomingBills({ subscriptions }: Props) {
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {upcoming.map((bill) => {
             const color = CATEGORY_COLORS[bill.category] ?? "#64748b";
+            //ด่วน ภายใน3วัน
             const isUrgent = bill.daysLeft <= 3;
             return (
               <div key={bill.id} style={{

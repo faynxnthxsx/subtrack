@@ -1,14 +1,15 @@
 // src/components/dashboard/StatsCard.tsx
-
+ //Optional? Object Structure
 type Props = {
   label: string;
   value: string | number;
   unit?: string;
-  sub?: string;
+  sub?: string; 
 };
 
 export default function StatsCard({ label, value, unit, sub }: Props) {
   return (
+    //CSS Variables
     <div style={{
       background: "var(--bg-card)",
       border: "1px solid var(--border)",

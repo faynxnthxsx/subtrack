@@ -82,7 +82,7 @@ export default function Sidebar() {
   function toggleTheme() {
     setTheme(theme === "dark" ? "light" : "dark");
   }
-
+//Graceful Sign-out 
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push("/login");
